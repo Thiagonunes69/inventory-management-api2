@@ -6,5 +6,6 @@ public record ProdutoResponseDTO(
     String descricao,
     String codigo,
     Integer qnt,
+    String status,
     String usuarioNome
 ) {}

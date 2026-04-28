@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.DTOs.ProdutoResponseDTO;
+import com.example.demo.DTOs.ProdutoStatusDTO;
 import com.example.demo.model.Produtos;
 import com.example.demo.model.user.Usuario;
 import com.example.demo.services.ProdutosService;
@@ -27,6 +28,7 @@ public class ProdutosController {
                 p.getDescricao(),
                 p.getCodigo(),
                 p.getQnt(),
+                p.getStatus(),
                 p.getUsuario().getNome()
         );
     }
@@ -74,7 +76,37 @@ public class ProdutosController {
         produtosService.removerProduto(produtoId, usuario.getId());
         return ResponseEntity.noContent().build(); // 👈 padrão REST
     }
+    // BUSCAR PRODUTOS POR STATUS
+    @GetMapping("/resumo")
+    public ResponseEntity<ProdutoStatusDTO> resumo(
+            @AuthenticationPrincipal Usuario usuario) {
 
+        List<Produtos> produtos = produtosService.listarProdutos(usuario.getId());
+
+        int total = produtos.size();
+        int emEstoque = 0;
+        int estoqueBaixo = 0;
+        int esgotados = 0;
+
+        for (Produtos p : produtos) {
+            if (p.getQnt() == 0) {
+                esgotados++;
+            } else if (p.getQnt() < 5) {
+                estoqueBaixo++;
+            } else {
+                emEstoque++;
+            }
+        }
+
+        ProdutoStatusDTO resumo = new ProdutoStatusDTO(
+            total,
+            emEstoque,
+            estoqueBaixo,
+            esgotados
+        );
+
+        return ResponseEntity.ok(resumo);
+    }
     // ✅ BUSCAR POR CÓDIGO
     @GetMapping("/listarPorCodigo/{codigo}")
     public ResponseEntity<ProdutoResponseDTO> listarPorCodigo(

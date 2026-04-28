@@ -29,9 +29,8 @@ public class Produtos {
         this.nome = nome;
         this.descricao = descricao;
         this.codigo = codigo;
-        this.qnt = qnt;
         this.usuario = usuario;
-        setStatus(qnt);
+        setQnt(qnt);
     }
 
     public Produtos() { 
@@ -80,6 +79,7 @@ public class Produtos {
 
     public void setQnt(int qnt) {
         this.qnt = qnt;
+        atualizarStatus();
     }
 
 
@@ -96,15 +96,16 @@ public class Produtos {
         return status;
     }
 
-    public void setStatus(int qnt) {
-    if (qnt == 0) {
-        this.status = "esgotado";
-    } else if (qnt < 5) {
-        this.status = "estoque baixo";
-    } else {
-        this.status = "em estoque";
+    private void atualizarStatus() {
+        if (this.qnt == 0) {
+            this.status = "esgotado";
+        } else if (this.qnt < 5) {
+            this.status = "estoque baixo";
+        } else {
+            this.status = "em estoque";
+        }
     }
 }
 
     
-}
+
