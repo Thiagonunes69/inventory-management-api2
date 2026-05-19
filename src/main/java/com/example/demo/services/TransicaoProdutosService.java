@@ -1,11 +1,16 @@
 package com.example.demo.services;
 
+import java.util.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.demo.DTOs.GraficoTransicaoProdutosDTO;
 import com.example.demo.model.Produtos;
 import com.example.demo.model.TipoTransacao;
 import com.example.demo.model.TransicaoProdutos;
@@ -80,4 +85,27 @@ public class TransicaoProdutosService {
         TransicaoProdutos transacao = buscarPorId(id, usuarioId);
         transicaoRepository.delete(transacao);
     }
+
+    public List<Map<String, Object>> buscarGrafico(
+        Long usuarioId,
+        Date inicio,
+        Date fim){
+
+        List<Object[]> resultado = transicaoRepository.buscarDadosGrafico(usuarioId, inicio, fim);
+
+        List<Map<String, Object>> dados = new ArrayList<>();
+
+        for(Object[] linha : resultado){
+
+            Map<String, Object> item = new HashMap<>();
+
+            item.put("dia", linha[0]);
+            item.put("entradas", linha[1]);
+            item.put("saidas", linha[2]);
+
+            dados.add(item);
+        }
+
+        return dados;
+}
 }

@@ -108,7 +108,7 @@ public class ProdutosController {
 
         return ResponseEntity.ok(resumo);
     }
-    // ✅ BUSCAR POR CÓDIGO
+    // BUSCAR POR CÓDIGO
     @GetMapping("/listarPorCodigo/{codigo}")
     public ResponseEntity<ProdutoResponseDTO> listarPorCodigo(
             @PathVariable String codigo,
@@ -118,7 +118,7 @@ public class ProdutosController {
         return ResponseEntity.ok(toDTO(produto));
     }
 
-    // ✅ EDITAR
+    // EDITAR
         @PutMapping("/editarProduto/{idProduto}")
         public ResponseEntity<ProdutoResponseDTO> editarProduto(
                 @PathVariable Long idProduto,
